@@ -1,0 +1,29 @@
+{
+  "name": "posyandu_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "prod": "nodemon ./app.js localhost 4400",
+    "models": "sequelize-auto -o './models/posyandu' -d posyandu_db -h localhost -u root -p 3306  -e mysql"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "^4.18.2",
+    "http-errors": "~1.6.3",
+    "jade": "^1.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "md5": "^2.3.0",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.3.3",
+    "prod": "^1.0.0",
+    "sequelize": "^6.32.0"
+  }
+}
