@@ -48,6 +48,7 @@ router.delete('/activities/:id', MasterDataCtrl.delete_activities);
 router.post('/children', MasterDataCtrl.add_children);
 router.get('/children', MasterDataCtrl.get_children);
 router.get('/children/:id', MasterDataCtrl.get_childrenById);
+router.get('/users/:user_id/children', MasterDataCtrl.get_childrenByUserId);
 router.put('/children/:id', MasterDataCtrl.update_children);
 router.delete('/children/:id', MasterDataCtrl.delete_children);
 

@@ -208,7 +208,15 @@ function delete_activities(req, res) {
 
 // Children
 
-function add_children(req, res) {
+async function add_children(req, res) {
+
+  const child = await models.tbl_children.findOne({ where: { name: req.body.name, date_of_birth: req.body.date_of_birth, } });
+    if (child !== null) {
+      return res.status(400).json({ message: "Anak sudah terdaftar" });
+    }
+
+    console.log(req.body);
+
   models.tbl_children
     .create({
       name: req.body.name,
@@ -247,6 +255,27 @@ function get_childrenById(req, res) {
     .findAll({
       where: {
         child_id : req.params.id,
+      },
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        api.ok(res, data);
+      } else {
+        api.error(res, "Record Not Found", 200);
+      }
+    })
+    .catch((e) => {
+      api.error(res, e, 500);
+    });
+}
+
+function get_childrenByUserId(req, res) {
+  const { user_id } = req.params;
+
+  models.tbl_children
+    .findAll({
+      where: {
+        user_id: user_id,
       },
     })
     .then((data) => {
@@ -589,6 +618,7 @@ module.exports = {
   add_children,
   get_children,
   get_childrenById,
+  get_childrenByUserId,
   update_children,
   delete_children,
   add_articles,
