@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('tbl_queue', {
+  const Queue = sequelize.define('tbl_queue', {
     queue_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -48,39 +48,27 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    sequelize,
     tableName: 'tbl_queue',
     timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "queue_id" },
-        ]
-      },
-      {
-        name: "child_id",
-        using: "BTREE",
-        fields: [
-          { name: "child_id" },
-        ]
-      },
-      {
-        name: "user_id",
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
-        ]
-      },
-      {
-        name: "posyandu_id",
-        using: "BTREE",
-        fields: [
-          { name: "posyandu_id" },
-        ]
-      },
-    ]
   });
+
+  // Definisikan relasi antara Queue dengan Children, Users, dan Posyandu
+  Queue.associate = (models) => {
+    Queue.belongsTo(models.tbl_children, {
+      foreignKey: 'child_id',
+      as: 'child',
+    });
+
+    Queue.belongsTo(models.tbl_users, {
+      foreignKey: 'user_id',
+      as: 'user',
+    });
+
+    Queue.belongsTo(models.tbl_posyandu, {
+      foreignKey: 'posyandu_id',
+      as: 'posyandu',
+    });
+  };
+
+  return Queue;
 };

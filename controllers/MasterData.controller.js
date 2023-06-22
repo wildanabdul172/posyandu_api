@@ -116,13 +116,26 @@ function add_activities(req, res) {
     });
 }
 
+
 function get_activities(req, res) {
   models.tbl_activities
-    .findAll()
+    .findAll({
+      include: [
+        {
+          model: models.tbl_posyandu,
+          attributes: ['posyandu_name', 'posyandu_id'],
+          as: 'posyandu',
+        },
+      ],
+    })
     .then((data) => {
-      console.log(data)
+      console.log(data);
       if (data.length > 0) {
-        api.ok(res, data);
+        const activities = data.map(activity => ({
+          ...activity.toJSON(),
+          activity_location: activity.posyandu ? activity.posyandu.posyandu_id : null,
+        }));
+        api.ok(res, activities);
       } else {
         api.error(res, "Record not found", 200);
       }
@@ -131,6 +144,8 @@ function get_activities(req, res) {
       api.error(res, e, 500);
     });
 }
+
+
 
 function get_activitiesById(req, res) {
   models.tbl_activities

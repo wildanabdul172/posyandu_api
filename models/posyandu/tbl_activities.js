@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('tbl_activities', {
+  const TblActivities = sequelize.define('tbl_activities', {
     activity_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -28,25 +29,16 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    sequelize,
     tableName: 'tbl_activities',
     timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "activity_id" },
-        ]
-      },
-      {
-        name: "activity_location",
-        using: "BTREE",
-        fields: [
-          { name: "activity_location" },
-        ]
-      },
-    ]
   });
+
+  TblActivities.associate = function(models) {
+    TblActivities.belongsTo(models.tbl_posyandu, {
+      foreignKey: 'activity_location',
+      as: 'posyandu',
+    });
+  };
+
+  return TblActivities;
 };

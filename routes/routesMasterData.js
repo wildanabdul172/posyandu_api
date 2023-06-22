@@ -1,5 +1,6 @@
 var express = require('express');
-var MasterDataCtrl = require('../controllers/MasterData.controller')
+var MasterDataCtrl = require('../controllers/MasterData.controller');
+var QueueCtrl = require('../controllers/Queue.controller');
 var router = express.Router();
 const multer = require('multer');
 
@@ -71,5 +72,13 @@ router.delete('/healthRecords/:id', MasterDataCtrl.delete_healthRecords);
 
 router.get('/posyandu', MasterDataCtrl.get_posyandu);
 router.get('/posyandu/:id', MasterDataCtrl.get_posyanduById);
+
+// Antrian
+
+router.post('/queue', QueueCtrl.addQueue);
+router.get('/queue', QueueCtrl.getQueues);
+router.get('/queue/:id', QueueCtrl.getQueueById);
+router.put('/queue/:id', QueueCtrl.updateQueue);
+router.delete('/queue/:id', QueueCtrl.deleteQueue);
 
 module.exports = router;
