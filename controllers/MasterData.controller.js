@@ -129,7 +129,6 @@ function get_activities(req, res) {
       ],
     })
     .then((data) => {
-      console.log(data);
       if (data.length > 0) {
         const activities = data.map(activity => ({
           ...activity.toJSON(),
