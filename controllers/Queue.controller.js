@@ -4,6 +4,7 @@ var api = require("../tools/common");
 // Fungsi untuk menambahkan antrian
 function addQueue(req, res) {
   const { child_id, posyandu_id, date_of_queue } = req.body;
+  console.log(date_of_queue);
 
   // Periksa apakah child_id sudah terdaftar dengan posyandu_id dan date_of_queue yang sama
   models.tbl_queue
@@ -192,6 +193,7 @@ function getQueueByPosyanduId(req, res) {
     .findOne({
       where: {
         posyandu_id: req.params.id,
+        status: 'Pending',
       },
       include: [
         {
@@ -210,6 +212,7 @@ function getQueueByPosyanduId(req, res) {
           as: "posyandu",
         },
       ],
+      order: [['queue_number', 'ASC']],
     })
     .then((data) => {
       if (data) {
@@ -228,6 +231,7 @@ function getQueueByPosyanduId(req, res) {
       api.error(res, e, 500);
     });
 }
+
 
 // Fungsi untuk mengupdate data antrian
 function updateQueue(req, res) {

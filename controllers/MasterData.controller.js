@@ -101,6 +101,7 @@ function delete_users(req, res) {
 //Activities
 
 function add_activities(req, res) {
+  console.log(req.body);
   models.tbl_activities
     .create({
       activity_name: req.body.activity_name,
@@ -354,6 +355,7 @@ function get_articles(req, res) {
     .findAll()
     .then((data) => {
       if (data.length > 0) {
+        console.log(data);
         api.ok(res, data);
       } else {
         api.error(res, "Record not found", 200);
@@ -476,7 +478,12 @@ function get_recordsByChildren(req, res) {
             },
           })
           .then((healthRecords) => {
-            api.ok(res, healthRecords);
+            const sortedRecords = healthRecords.sort((a, b) => {
+              return new Date(a.date_of_record) - new Date(b.date_of_record);
+            });
+
+            console.log(sortedRecords);
+            api.ok(res, sortedRecords);
           })
           .catch((e) => {
             api.error(res, e, 500);
@@ -489,6 +496,7 @@ function get_recordsByChildren(req, res) {
       api.error(res, e, 500);
     });
 }
+
 
 function get_healthRecords(req, res) {
   models.tbl_healthrecords
@@ -551,7 +559,7 @@ function delete_healthRecords(req, res) {
   models.tbl_healthrecords
     .destroy({
       where: {
-        id: req.params.id,
+        record_id: req.params.id,
       },
     })
     .then(function (deleteRecord) {

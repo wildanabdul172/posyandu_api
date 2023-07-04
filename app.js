@@ -4,9 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var http = require('http');
-var cors  = require('cors');
+var cors = require('cors');
+var moment = require('moment-timezone'); // Tambahkan library moment-timezone
 
-//Routing
+// Routing
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var routesAuthentication = require('./routes/routesAuthentication');
@@ -27,6 +28,8 @@ app.use(cookieParser());
 app.use(express.static('public/images'))
 app.use(express.json({ limit: "50mb" }));
 
+// Set zona waktu default
+moment.tz.setDefault('Asia/Jakarta');
 
 // Path Base
 app.use('/api', routesAuthentication);
@@ -54,7 +57,7 @@ app.use(function(err, req, res, next) {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort( '4400' || settings.server.port);
+var port = normalizePort('4400' || settings.server.port);
 app.set('port', port);
 
 /**
@@ -70,23 +73,23 @@ var server = http.createServer(app);
 server.listen(port);
 
 /**
-* Normalize a port into a number, string, or false.
-*/
+ * Normalize a port into a number, string, or false.
+ */
 
 function normalizePort(val) {
- var port = parseInt(val, 10);
+  var port = parseInt(val, 10);
 
- if (isNaN(port)) {
-   // named pipe
-   return val;
- }
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
- if (port >= 0) {
-   // port number
-   return port;
- }
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
- return false;
+  return false;
 }
 
 module.exports = app;
