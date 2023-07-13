@@ -78,6 +78,7 @@ router.get('/posyandu/:id', MasterDataCtrl.get_posyanduById);
 
 router.post('/queue', QueueCtrl.addQueue);
 router.get('/queue', QueueCtrl.getQueues);
+router.get('/queue-date', QueueCtrl.getQueuesByDate);
 router.get('/queue/:id', QueueCtrl.getQueueById);
 router.get('/users/:id/queue', QueueCtrl.getQueueByUserId);
 router.get('/posyandu/:id/queue', QueueCtrl.getQueueByPosyanduId);

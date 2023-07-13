@@ -1,5 +1,6 @@
 var models = require("../config/sequelizeORM");
 var api = require("../tools/common");
+var op = ("sequelize");
 
 // Fungsi untuk menambahkan antrian
 function addQueue(req, res) {
@@ -99,6 +100,52 @@ function getQueues(req, res) {
     });
 }
 
+// Fungsi untuk mendapatkan daftar antrian hari ini
+function getQueuesByDate(req, res) {
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  models.tbl_queue
+  .findAll({
+    where: {
+      date_of_queue: { [op.gte]: today },
+    },      
+      include: [
+        {
+          model: models.tbl_children,
+          attributes: ["name", "child_id"],
+          as: "child",
+        },
+        {
+          model: models.tbl_users,
+          attributes: ["name", "user_id"],
+          as: "user",
+        },
+        {
+          model: models.tbl_posyandu,
+          attributes: ["posyandu_name", "posyandu_id", "posyandu_address"],
+          as: "posyandu",
+        },
+      ],
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        const queues = data.map((queue) => ({
+          ...queue.toJSON(),
+          child_id: queue.child ? queue.child.child_id : null,
+          user_id: queue.user ? queue.user.user_id : null,
+          posyandu_id: queue.posyandu ? queue.posyandu.posyandu_id : null,
+        }));
+        api.ok(res, queues);
+      } else {
+        api.error(res, "Record not found", 200);
+      }
+    })
+    .catch((e) => {
+      api.error(res, e, 500);
+    });
+}
 
 // Fungsi untuk mendapatkan detail antrian berdasarkan ID
 function getQueueById(req, res) {
@@ -189,11 +236,15 @@ function getQueueByUserId(req, res) {
 
 // Fungsi untuk mendapatkan detail antrian berdasarkan ID Posyandu
 function getQueueByPosyanduId(req, res) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   models.tbl_queue
     .findOne({
       where: {
         posyandu_id: req.params.id,
         status: 'Pending',
+        date_of_queue: { [op.gte]: today },
       },
       include: [
         {
@@ -317,4 +368,5 @@ module.exports = {
   deleteQueue,
   getQueueByPosyanduId,
   getQueueByUserId,  
+  getQueuesByDate,
 };

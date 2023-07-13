@@ -1,6 +1,6 @@
 var models = require("../config/sequelizeORM");
 var api = require("../tools/common");
-const moment = require("moment-timezone");
+var op = ("sequelize");
 
 //Users
 
@@ -144,8 +144,6 @@ function get_activities(req, res) {
       api.error(res, e, 500);
     });
 }
-
-
 
 function get_activitiesById(req, res) {
   models.tbl_activities
@@ -355,7 +353,6 @@ function get_articles(req, res) {
     .findAll()
     .then((data) => {
       if (data.length > 0) {
-        console.log(data);
         api.ok(res, data);
       } else {
         api.error(res, "Record not found", 200);
