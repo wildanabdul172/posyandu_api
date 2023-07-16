@@ -541,7 +541,7 @@ function update_healthRecords(req, res) {
         arm_circumference: req.body.arm_circumference,
       },
       {
-        where: { id: req.params.id },
+        where: { record_id: req.params.id },
       }
     )
     .then((data) => {
